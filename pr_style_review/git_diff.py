@@ -9,6 +9,9 @@ class GitDiff(object):
     """
 
     def __init__(self, diff):
+        """
+        Initialize GitDiff from git.diff.Diff object.
+        """
         # Initialize variables
         self.filename = None
         self._added_lines = []
@@ -19,8 +22,7 @@ class GitDiff(object):
         elif diff.change_type == 'A':  # added
             self.filename = diff.b_path
             new_content = diff.b_blob.data_stream.read().decode('utf-8')
-            print(new_content)
-            self._added_lines = range(1, len(new_content.splitlines(True)) + 1)
+            self._added_lines = list(range(1, len(new_content.splitlines(True)) + 1))
         elif diff.change_type == 'M':  # modified
             self.filename = diff.b_path
             text_diff = compare_two_texts(
@@ -38,3 +40,13 @@ class GitDiff(object):
         print('Diff on {}'.format(self.filename))
         print('  {} lines are added'.format(len(self._added_lines)))
         print('  {} lines are removed'.format(len(self._removed_lines)))
+
+    def get_modified_lines(self):
+        return self._added_lines + self._removed_lines
+
+    def filter_linter_result(self, linter_result_array):
+        result = []
+        for linter_result in linter_result_array:
+            if linter_result.line_number in self.get_modified_lines():
+                result.append(linter_result)
+        return result
