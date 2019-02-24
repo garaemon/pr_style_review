@@ -3,6 +3,7 @@ python:
   - "3.6"
 install:
   - python setup.py install
+  - pip install pylint
 script:
   - echo ${TRAVIS_BRANCH}
-  - python review.py . ${TRAVIS_BRANCH}
+  - if [ "${TRAVIS_EVENT_TYPE}" == "pull_request" ]; then python review.py . ${TRAVIS_BRANCH}; fi
