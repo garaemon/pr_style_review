@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
+import os
 import sys
+
+from argparse import ArgumentParser
 
 from git import Repo
 from pr_style_review.git_diff import GitDiff
@@ -9,8 +12,8 @@ from pr_style_review.linter_result import pretty_print_linter_result
 from pr_style_review.github import Github
 
 
-def main(git_repo, target):
-    gh = Github(dry_run=True)
+def main(git_repo, target, dry_run):
+    gh = Github(dry_run=dry_run)
     gh.login()
     repo = Repo.init(git_repo)
     # create diff object from target to head
@@ -20,9 +23,6 @@ def main(git_repo, target):
     # Each object represents change to one file.
     diffs = [GitDiff(d) for d in diff_array_to_head]
     changed_files = [d for d in diffs if d.filename is not None]
-    commit_id = repo.head.commit.hexsha
-    # for d in diffs:
-    #     d.summary()
     for diff in changed_files:
         print('Detect change in {}'.format(diff.filename))
         filename = diff.filename
@@ -36,10 +36,17 @@ def main(git_repo, target):
         print('filtered linter result is {}'.format(len(filtered_linter_result)))
         pretty_print_linter_result(filtered_linter_result)
         for linter_result in filtered_linter_result:
-            gh.post_review_comment(commit_id, linter_result)
+            commit_id = linter_result.resolve_commit_id(repo)
+            position = linter_result.resolve_position(repo, commit_id)
+            gh.post_review_comment(commit_id, position, linter_result)
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    parser = ArgumentParser()
+    parser.add_argument('git_directory')
+    parser.add_argument('target_branch')
+    parser.add_argument('--dry-run', action='store_true')
+    args = parser.parse_args()
+    main(args.git_directory, args.target_branch, args.dry_run)
     # with open(sys.argv[1]) as f:
     #     from_text = f.read()
     # with open(sys.argv[2]) as f:

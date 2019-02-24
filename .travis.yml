@@ -1,6 +1,8 @@
 language: python
 python:
   - "3.6"
+env:
+  - REVIEW_USER=garaemon
 install:
   - python setup.py install
   - pip install pylint
