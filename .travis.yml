@@ -6,4 +6,4 @@ install:
   - pip install pylint
 script:
   - echo ${TRAVIS_BRANCH}
-  - if [ "${TRAVIS_EVENT_TYPE}" = "pull_request" ]; then python review.py . ${TRAVIS_BRANCH}; fi
+  - if [ "${TRAVIS_EVENT_TYPE}" == "pull_request" ]; then python review.py . ${TRAVIS_BRANCH}; fi
