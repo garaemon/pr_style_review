@@ -1,5 +1,6 @@
 from github3 import login
 
+
 class Github(object):
 
     def __init__(self, dry_run=False):
@@ -21,6 +22,7 @@ class Github(object):
                 'position': line_number,
                 'path': filename
             })
+
     def post_review_comment(self, commit_id, linter_result):
         self._post_review_comment(linter_result.file_name,
                                   commit_id,
