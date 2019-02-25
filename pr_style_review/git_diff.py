@@ -42,10 +42,12 @@ class GitDiff(object):
         print('  {} lines are removed'.format(len(self._removed_lines)))
 
     def get_modified_lines(self):
-        return self._added_lines + self._removed_lines
+        return self._added_lines
+        #return self._added_lines + self._removed_lines
 
     def filter_linter_result(self, linter_result_array):
         result = []
+        print('modified lines of {} are'.format(self.filename), self.get_modified_lines())
         for linter_result in linter_result_array:
             if linter_result.line_number in self.get_modified_lines():
                 result.append(linter_result)
