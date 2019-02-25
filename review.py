@@ -18,9 +18,16 @@ def main(git_repo, target, dry_run):
     repo = Repo.init(git_repo)
     # create diff object from target to head
     before_commit = repo.commit(target)
+    head_commit_id = repo.commit.head.hexsha
     diff_array_to_head = before_commit.diff('HEAD')
     # diff_array_to_head is an array of git diff object.
     # Each object represents change to one file.
+    if 'TRAVIS_PULL_REQUEST_SHA' in os.environ:
+        pr_head_commit_id = os.environ['TRAVIS_PULL_REQUEST_SHA']
+    else:
+        pr_head_commit_id = ''
+    print('head_commit_id: {}'.format(head_commit_id))
+    print('pr_commit_id: {}'.format(pr_commit_id))
     diffs = [GitDiff(d) for d in diff_array_to_head]
     changed_files = [d for d in diffs if d.filename is not None]
     for diff in changed_files:
@@ -37,6 +44,7 @@ def main(git_repo, target, dry_run):
         pretty_print_linter_result(filtered_linter_result)
         for linter_result in filtered_linter_result:
             commit_id = linter_result.resolve_commit_id(repo)
+
             position = linter_result.resolve_position(repo, commit_id)
             gh.post_review_comment(commit_id, position, linter_result)
 
