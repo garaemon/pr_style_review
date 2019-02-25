@@ -27,7 +27,7 @@ def main(git_repo, target, dry_run):
     else:
         pr_head_commit_id = ''
     print('head_commit_id: {}'.format(head_commit_id))
-    print('pr_commit_id: {}'.format(pr_commit_id))
+    print('pr_head_commit_id: {}'.format(pr_head_commit_id))
     diffs = [GitDiff(d) for d in diff_array_to_head]
     changed_files = [d for d in diffs if d.filename is not None]
     for diff in changed_files:
