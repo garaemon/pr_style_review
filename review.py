@@ -18,7 +18,7 @@ def main(git_repo, target, dry_run):
     repo = Repo.init(git_repo)
     # create diff object from target to head
     before_commit = repo.commit(target)
-    head_commit_id = repo.commit.head.hexsha
+    head_commit_id = repo.head.commit.hexsha
     diff_array_to_head = before_commit.diff('HEAD')
     # diff_array_to_head is an array of git diff object.
     # Each object represents change to one file.
