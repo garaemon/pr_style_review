@@ -39,9 +39,9 @@ declare diffBranchName=$(git show-branch | grep '*' | grep -v "$(git rev-parse -
 
 # filter files and lint
 echo "${diffBranchName}...HEAD"
-echo "textlint -> review_comments"
+echo "pylint -> review_comments"
 git diff --name-only --diff-filter=ACMR ${diffBranchName} \
-| grep -a '.*.md$' \
+| grep -a '.*.py$' \
 | xargs ./bin/pylint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
