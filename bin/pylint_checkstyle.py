@@ -43,7 +43,7 @@ def main(file_names):
         commands = ['pylint', f, '-f', 'json']
         try:
             pylint_output = subprocess.check_output(commands)
-        except subprocess.SubprocessError as error:
+        except subprocess.CalledProcessError as error:
             pylint_output = error.output
         pylint_result_array = json.loads(pylint_output)
         for pylint_result in pylint_result_array:
