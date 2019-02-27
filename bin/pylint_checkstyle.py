@@ -51,12 +51,14 @@ def main(file_names):
             severity = pylint_result['type']
             if severity == 'convention':
                 severity = 'info'
+            lint_link = 'http://pylint-messages.wikidot.com/messages:{}'.format(
+                pylint_result['message-id'])
             set_xml_attribute_from_dict(dom, xml_error, {
                 'line': str(pylint_result['line']),
-                'message': pylint_result['message'],
+                'message': '{}\n[ref]({})'.format(pylint_result['message'],
+                                                  lint_link),
                 'column': '1',
                 'severity': severity
-                # message-id
             })
             xml_file.appendChild(xml_error)
     print(dom.toprettyxml())
