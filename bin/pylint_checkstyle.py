@@ -47,7 +47,7 @@ def main(file_names):
                 severity = 'info'
             set_xml_attribute_from_dict(dom, xml_error, {
                 'line': str(pylint_result['line']),
-                'messag': pylint_result['message'],
+                'message': pylint_result['message'],
                 'column': '1',
                 'severity': severity
                 # message-id
