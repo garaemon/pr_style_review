@@ -1,9 +1,15 @@
 language: python
 python:
   - "3.6"
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - vendor/bundle
 install:
   - python setup.py install
   - pip install pylint
+  - gem install --no-document checkstyle_filter-git saddler saddler-reporter-github
+  -
 script:
   - echo ${TRAVIS_BRANCH}
-  - if [ "${TRAVIS_EVENT_TYPE}" == "pull_request" ]; then python review.py . ${TRAVIS_BRANCH}; fi
+  - ./review.sh
