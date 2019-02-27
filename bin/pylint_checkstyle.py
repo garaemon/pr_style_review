@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Output pylint result as checkstyle xml format.
+"""
 
 import json
 import sys
@@ -7,6 +10,9 @@ import xml.dom.minidom
 
 
 def set_xml_attribute_from_dict(dom, xml_element, attribute_map):
+    """
+    Set attribuets of xml element from dictionary object
+    """
     for name, value in attribute_map.items():
         attribute = dom.createAttribute(name)
         attribute.value = value
