@@ -26,21 +26,17 @@ if [ "$TRAVIS" == "true" ]; then
   git checkout $TRAVIS_FROM_BRANCH
 fi
 
-# Install saddler
-# https://github.com/packsaddle/ruby-saddler
-# Need secret env: `GITHUB_ACCESS_TOKEN=xxx`
-gem install --no-document checkstyle_filter-git saddler saddler-reporter-github
-
 # Diff Target Branch
 # diff HEAD...target
 # http://stackoverflow.com/questions/3161204/find-the-parent-branch-of-a-git-branch
 # http://qiita.com/upinetree/items/0b74b08b64442f0a89b9
-declare diffBranchName=$(git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}')
+# declare diffBranchName=$(git show-branch | grep '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}')
+declare diffBranchName=origin/master
 
 # filter files and lint
 echo "${diffBranchName}...HEAD"
 echo "pylint -> review_comments"
-git diff --name-only --diff-filter=ACMR ${diffBranchName} \
+git diff --name-only --diff-filter=ACMR $diffBranchName \
 | grep -a '.*.py$' \
 | xargs ./bin/pylint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
