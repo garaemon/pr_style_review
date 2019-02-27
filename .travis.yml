@@ -4,6 +4,7 @@ python:
 cache:
   directories:
     - $HOME/.cache/pip
+    - vendor/bundle
 install:
   - python setup.py install
   - pip install pylint
