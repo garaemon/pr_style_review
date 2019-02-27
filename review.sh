@@ -35,10 +35,17 @@ declare diffBranchName=origin/master
 
 # filter files and lint
 echo "${diffBranchName}...HEAD"
-echo "pylint -> review_comments"
 git diff --name-only --diff-filter=ACMR $diffBranchName \
 | grep -a '.*.py$' \
 | xargs ./bin/pylint_checkstyle.py \
+| checkstyle_filter-git diff ${diffBranchName} \
+| saddler report \
+    --require saddler/reporter/github \
+    --reporter Saddler::Reporter::Github::PullRequestReviewComment
+
+git diff --name-only --diff-filter=ACMR $diffBranchName \
+| grep -a '.*.yml$' -o '.*.yaml$' \
+| xargs ./bin/yamllint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
     --require saddler/reporter/github \
