@@ -34,13 +34,13 @@ def main(file_names):
     dom = xml.dom.minidom.Document()
     root = dom.createElement('checkstyle')
     dom.appendChild(root)
-    for f in file_names:
+    for file_name in file_names:
         xml_file = dom.createElement('file')
         root.appendChild(xml_file)
         name_attribute = dom.createAttribute('name')
-        name_attribute.value = f
+        name_attribute.value = file_name
         xml_file.setAttributeNode(name_attribute)
-        commands = ['pylint', f, '-f', 'json']
+        commands = ['pylint', file_name, '-f', 'json']
         try:
             pylint_output = subprocess.check_output(commands)
         except subprocess.CalledProcessError as error:
