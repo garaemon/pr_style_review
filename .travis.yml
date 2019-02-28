@@ -8,8 +8,8 @@ cache:
 install:
   - python setup.py install
   - pip install pylint
+  - pip install yamllint
   - gem install --no-document checkstyle_filter-git saddler saddler-reporter-github
-  -
 script:
   - echo ${TRAVIS_BRANCH}
-  - ./review.sh
+  - ./review.sh || true
