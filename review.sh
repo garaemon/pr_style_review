@@ -36,7 +36,7 @@ declare diffBranchName=origin/master
 # filter files and lint
 echo "${diffBranchName}...HEAD"
 git diff --name-only --diff-filter=ACMR $diffBranchName \
-| grep -a '.*.py$' \
+| grep -a '.*\.py$' \
 | xargs ./bin/pylint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
@@ -44,7 +44,7 @@ git diff --name-only --diff-filter=ACMR $diffBranchName \
     --reporter Saddler::Reporter::Github::PullRequestReviewComment
 
 git diff --name-only --diff-filter=ACMR $diffBranchName \
-| grep -a -e '.*.yml$' -e '.*.yaml$' \
+| grep -a -e '.*\.yml$' -e '.*\.yaml$' \
 | xargs ./bin/yamllint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
@@ -52,8 +52,8 @@ git diff --name-only --diff-filter=ACMR $diffBranchName \
     --reporter Saddler::Reporter::Github::PullRequestReviewComment
 
 git diff --name-only --diff-filter=ACMR $diffBranchName \
-    | grep -a -e '.*.cpp$' -e '.*.cc$' -e '*.c$' -e '.*.h$' -e '.*.hpp$' \
-| xargs ./bin/yamllint_checkstyle.py \
+| grep -a -e '.*\.cpp$' -e '.*\.cc$' -e '*\.c$' -e '.*\.h$' -e '.*\.hpp$' \
+| xargs ./bin/cpplint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
     --require saddler/reporter/github \
