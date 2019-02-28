@@ -50,3 +50,11 @@ git diff --name-only --diff-filter=ACMR $diffBranchName \
 | saddler report \
     --require saddler/reporter/github \
     --reporter Saddler::Reporter::Github::PullRequestReviewComment
+
+git diff --name-only --diff-filter=ACMR $diffBranchName \
+| grep -a '.*.cpp$' -o '.*.cc$' -o '*.c$' -o '.*.h$' -o '.*.hpp$' \
+| xargs ./bin/yamllint_checkstyle.py \
+| checkstyle_filter-git diff ${diffBranchName} \
+| saddler report \
+    --require saddler/reporter/github \
+    --reporter Saddler::Reporter::Github::PullRequestReviewComment
