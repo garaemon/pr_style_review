@@ -44,7 +44,7 @@ git diff --name-only --diff-filter=ACMR $diffBranchName \
     --reporter Saddler::Reporter::Github::PullRequestReviewComment
 
 git diff --name-only --diff-filter=ACMR $diffBranchName \
-| grep -a '.*.yml$' -o '.*.yaml$' \
+| grep -a -e '.*.yml$' -e '.*.yaml$' \
 | xargs ./bin/yamllint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
@@ -52,7 +52,7 @@ git diff --name-only --diff-filter=ACMR $diffBranchName \
     --reporter Saddler::Reporter::Github::PullRequestReviewComment
 
 git diff --name-only --diff-filter=ACMR $diffBranchName \
-| grep -a '.*.cpp$' -o '.*.cc$' -o '*.c$' -o '.*.h$' -o '.*.hpp$' \
+    | grep -a -e '.*.cpp$' -e '.*.cc$' -e '*.c$' -e '.*.h$' -e '.*.hpp$' \
 | xargs ./bin/yamllint_checkstyle.py \
 | checkstyle_filter-git diff ${diffBranchName} \
 | saddler report \
