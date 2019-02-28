@@ -31,6 +31,17 @@ def parse_yaml_result(yamllint_result):
     return (line_number, column_number, severity, message)
 
 
+def create_xml_element_for_file(dom, filename):
+    """
+    Create <file> element for the specified filename
+    """
+    xml_file = dom.createElement('file')
+    set_xml_attribute_from_dict(dom, xml_file, {
+        'name': filename
+    })
+    return xml_file
+
+
 def main(file_names):
     """
     main entrypoint.
@@ -47,11 +58,8 @@ def main(file_names):
     root = dom.createElement('checkstyle')
     dom.appendChild(root)
     for file_name in file_names:
-        xml_file = dom.createElement('file')
+        xml_file = create_xml_element_for_file(dom, file_name)
         root.appendChild(xml_file)
-        name_attribute = dom.createAttribute('name')
-        name_attribute.value = file_name
-        xml_file.setAttributeNode(name_attribute)
         commands = ['yamllint', file_name, '-f', 'parsable']
         try:
             yamllint_output = subprocess.check_output(commands)
