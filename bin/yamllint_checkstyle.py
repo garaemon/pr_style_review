@@ -28,7 +28,12 @@ def parse_yaml_result(yamllint_result):
     yamllint_severity_info = yamllint_result.split(' ')[1]
     severity = yamllint_severity_info[1:-1]
     message = ' '.join(yamllint_result.split(' ')[2:])
-    return (line_number, column_number, severity, message)
+    return {
+        'line': line_number,
+        'column': column_number,
+        'severity': severity,
+        'message': message,
+    }
 
 
 def create_xml_element_for_file(dom, filename):
@@ -69,13 +74,7 @@ def main(file_names):
         for yamllint_result_bytes in yamllint_result_array:
             xml_error = dom.createElement('error')
             yaml_result = yamllint_result_bytes.decode('utf-8')
-            (line_number, column_number, severity, message) = parse_yaml_result(yaml_result)
-            set_xml_attribute_from_dict(dom, xml_error, {
-                'line': line_number,
-                'message': message,
-                'column': column_number,
-                'severity': severity
-            })
+            set_xml_attribute_from_dict(dom, xml_error, parse_yaml_result(yaml_result))
             xml_file.appendChild(xml_error)
     print(dom.toprettyxml())
 
