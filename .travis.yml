@@ -12,4 +12,4 @@ install:
   - gem install --no-document checkstyle_filter-git saddler saddler-reporter-github
 script:
   - echo ${TRAVIS_BRANCH}
-  - ./review.sh
+  - ./review.sh || true
